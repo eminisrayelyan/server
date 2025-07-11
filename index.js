@@ -1,16 +1,35 @@
 const { createServer } = require("http");
 const { Server } = require("socket.io");
 
+
+let allCounts= {};
+
+const PORT= 3000;
+const ORIGIN = "http://localhost:5173";
+
 const httpServer = createServer();
-const io = new Server(httpServer, {
-    cors: {origin: "http://localhost:5173"}
-});
+
+const io = new Server(httpServer, { cors: {origin: ORIGIN } });
 
 
-io.on("connection", () => {
-    console.log("client connected to server")
+io.on("connection", (socket) => {
+    console.log(socket.id,'client server connection');
+
+    socket.join('room');
+
+    if(!allCounts[socket.id]){
+      allCounts[socket.id = 0];
+    }
+
+    socket.emit('update-count', allCounts);
+
+    socket.on('disconnect', () => {
+      delete allCounts[socket.id];
+      socket.leave('room');
+    });
+    
   });
 
 
 
-httpServer.listen(3000);
+httpServer.listen(PORT, '0.0.0.0', () => console.log(`http://localhost:${PORT}`));
