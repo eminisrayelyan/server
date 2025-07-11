@@ -18,10 +18,17 @@ io.on("connection", (socket) => {
     socket.join('room');
 
     if(!allCounts[socket.id]){
-      allCounts[socket.id = 0];
+      allCounts[socket.id] = 0;
     }
 
     socket.emit('update-count', allCounts);
+
+    socket.on('increase-count', () => {
+      console.log(allCounts[socket.id], 'increase-count');
+      allCounts[socket.id]++;
+
+      io.to('room').emit('update-count', allCounts);
+    });
 
     socket.on('disconnect', () => {
       delete allCounts[socket.id];
