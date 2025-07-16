@@ -26,6 +26,10 @@ io.on("connection", (socket) => {
     socket.on('increase-count', () => {
       console.log(allCounts[socket.id], 'increase-count');
       allCounts[socket.id]++;
+      if (allCounts[socket.id] >= 30) {
+        io.to('room').emit('winner', socket.id);
+        io.socketsLeave("room");
+      }
 
       io.to('room').emit('update-count', allCounts);
     });
