@@ -1,11 +1,11 @@
-const { createServer } = require("http");
-const { Server } = require("socket.io");
+import { createServer }from "http";
+import { Server } from "socket.io";
+
 
 
 let allCounts= {};
-
-const PORT= 3000;
-const ORIGIN = "http://localhost:5173";
+const PORT = Number(process.env.PORT || 3000) ;
+const ORIGIN = "https://tumo-eminisrayelyan-client.vercel.app";
 
 const httpServer = createServer();
 
